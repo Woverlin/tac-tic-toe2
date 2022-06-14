@@ -5,6 +5,9 @@
     flex-direction: column;
     .title{
         padding:20px 0;
+        padding-top: 40vh;
+        font-weight: bold;
+        font-size:20px
     }
     .table {
         &-row {
@@ -14,7 +17,9 @@
     }
     .result-container{
         height: 50px;
-        padding: 20px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         .result {
             font-size: 20px; 
         }
@@ -25,8 +30,9 @@
     .game-mode{
         padding:20px 0;
         font-size: 16px;
-        .title{
+        &__title{
             font-size: 18px;
+            padding:10px;
         }
         span{
             padding:0 20px;
@@ -35,6 +41,19 @@
     .button-reset{
         height: 35px;
         width: 120px;
+    }
+    .history-container{
+        padding:20px 0;
+        div{
+            font-size:16px;
+            padding:10px
+        }
+        .history-item{
+            display: flex;
+            flex-direction: row;
+            width:250px;
+            justify-content:space-between;
+        }
     }
    
 }

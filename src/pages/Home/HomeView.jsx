@@ -3,7 +3,13 @@ import { PLAYERS } from ".";
 import TacticItem from "../../components/TacTicItem";
 import './Home.scss';
 const HomeView = ({ table, player, onClick, winner, reset, mode, setMode, isGameRunning }) => {
-    const winnerName = winner === 2 ? 'No one win' : winner === 1 ? 'X win' : 'O win'
+    const getWinnerName = (winner) =>  winner === 2 ? 'No one win' : winner === 1 ? 'X win' : 'O win';
+
+    let historyGame = localStorage.getItem('historyGame');
+    if (historyGame && Array.isArray(JSON.parse(historyGame))) {
+        historyGame = JSON.parse(historyGame)
+    }
+
     return (
         <div className='home'>
             <div className='title'>
@@ -22,7 +28,7 @@ const HomeView = ({ table, player, onClick, winner, reset, mode, setMode, isGame
                 <div className='result-container'>
                     {winner !== -1 ?
                         <div className='result'>
-                            {winnerName}
+                            {getWinnerName(winner)}
                         </div>
                         : <div className="turn">
                             {player === PLAYERS.ONE ? "X's turn" : "O's turn"}
@@ -31,7 +37,7 @@ const HomeView = ({ table, player, onClick, winner, reset, mode, setMode, isGame
                 </div>
             </div>
             <div className='game-mode'>
-                <div className='title'>
+                <div className='game-mode__title'>
                     Mode:
                 </div>
 
@@ -47,6 +53,22 @@ const HomeView = ({ table, player, onClick, winner, reset, mode, setMode, isGame
             <button className='button-reset' onClick={reset}>
                 Reset game
             </button>
+            <div className='history-container'>
+                <div>
+                    Hisotry
+                </div>
+                {historyGame?.map((item, index) => <div className='history-item' key={index} >
+                    <span>
+                        Round {index + 1}
+                    </span>
+                    <span>
+                        {getWinnerName(item.winnerId)}
+                    </span>
+                   
+                </div>)}
+            </div>
+
+         
         </div>
     );
 };

@@ -21,6 +21,7 @@ const Home = () => {
         const persistData = localStorage.getItem('tableData');
         const player = localStorage.getItem('player');
         const mode = localStorage.getItem('mode');
+
         if (persistData && Array.isArray(JSON.parse(persistData))) {
             setTable(JSON.parse(persistData))
         }
@@ -99,8 +100,16 @@ const Home = () => {
             row = Math.floor(Math.random() * 3);
         }
         while (table[col][row] !== -1);
-
         onClick(col, row, player, true)
+    }
+
+    const saveWinner = (winner) => {
+        let historyGame = localStorage.getItem("historyGame");
+        if (historyGame && Array.isArray(JSON.parse(historyGame))) {
+            historyGame = JSON.parse(historyGame)
+        }
+        historyGame.push({ winnerId: winner });
+        localStorage.setItem('historyGame', JSON.stringify(historyGame))
     }
 
     const onClick = (col, row, player, isComputor = false) => {
@@ -110,7 +119,8 @@ const Home = () => {
         setTable([...table])
         const newWinner = onCheckWinner(player)
         if (newWinner !== -1) {
-            resetTable()
+            resetTable();
+            saveWinner(newWinner)
             return setWinner(newWinner);
         }
         changePlayer(player);
