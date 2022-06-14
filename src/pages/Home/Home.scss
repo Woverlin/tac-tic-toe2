@@ -14,12 +14,26 @@
     }
     .result-container{
         height: 50px;
+        padding: 20px 0;
         .result {
-            padding: 20px 0;
+            font-size: 20px; 
+        }
+        .turn{
+            font-size:15px;
+        }
+    }
+    .game-mode{
+        padding:20px 0;
+        font-size: 16px;
+        .title{
+            font-size: 18px;
+        }
+        span{
+            padding:0 20px;
         }
     }
     .button-reset{
-        height: 25px;
+        height: 35px;
         width: 120px;
     }
    

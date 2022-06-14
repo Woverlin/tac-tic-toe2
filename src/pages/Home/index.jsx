@@ -1,19 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import HomeView from "./HomeView";
 
-export const ROUND = {
+export const PLAYERS = {
     ONE: 1,
     TWO: 0,
 };
 const Home = () => {
     const initTabel = [new Array(3).fill(-1), new Array(3).fill(-1), new Array(3).fill(-1)];
     const [table, setTable] = useState(initTabel);
-    const [round, setRound] = useState(ROUND.ONE)
+    const [player, setPlayer] = useState(PLAYERS.ONE)
     const [winner, setWinner] = useState(-1);
+    const [mode, setMode] = useState(0);
+    const [isGameRunning, setIsGameRunning] = useState(false)
 
-    const onCheckWinner = () => {
-        const diagonals = checkDiagonals();
-        const winer = checkVerticalsAndHorizontals();
+    useEffect(() => {
+        resumeGame()
+    }, [])
+
+    const resumeGame = () => {
+        const persistData = localStorage.getItem('tableData');
+        const player = localStorage.getItem('player');
+        const mode = localStorage.getItem('mode');
+        if (persistData && Array.isArray(JSON.parse(persistData))) {
+            setTable(JSON.parse(persistData))
+        }
+        if (player !== null) setPlayer(+player);
+        setMode(+mode)
+    }
+
+    const onCheckWinner = (player) => {
+        const diagonals = checkDiagonals(player);
+        const winer = checkVerticalsAndHorizontals(player);
 
         if (diagonals !== -1) {
             return diagonals;
@@ -29,13 +46,12 @@ const Home = () => {
         return -1
     };
 
-
-    const checkDiagonals = () => {
+    const checkDiagonals = (player) => {
         if (
-            (table[0][0] === round && table[1][1] === round && table[2][2] === round) ||
-            (table[0][2] === round && table[1][1] === round && table[2][0] === round)
+            (table[0][0] === player && table[1][1] === player && table[2][2] === player) ||
+            (table[0][2] === player && table[1][1] === player && table[2][0] === player)
         ) {
-            return round;
+            return player;
         }
         return -1;
     };
@@ -51,33 +67,69 @@ const Home = () => {
         return true;
     };
 
-    const checkVerticalsAndHorizontals = () => {
+    const checkVerticalsAndHorizontals = (player) => {
         for (let i = 0; i <= 2; i++) {
             if (
-                (table[0][i] === round && table[1][i] === round && table[2][i] === round) ||
-                (table[i][0] === round && table[i][1] === round && table[i][2] === round)
+                (table[0][i] === player && table[1][i] === player && table[2][i] === player) ||
+                (table[i][0] === player && table[i][1] === player && table[i][2] === player)
             ) {
-                return round;
+                return player;
             }
         }
         return -1;
     };
 
-    const onClick = (col, row) => {
-        if (table[col][row] !== -1 || winner !== -1) return null;
-        table[col][row] = round;
+    const changePlayer = (currentPlayer) => {
+        const nextPlayer = currentPlayer === PLAYERS.TWO ? PLAYERS.ONE : PLAYERS.TWO;
+        setPlayer(nextPlayer);
+        localStorage.setItem("player", nextPlayer.toString());
+    }
 
-        setRound(round === ROUND.TWO ? ROUND.ONE : ROUND.TWO)
+    const resetTable = () => {
+        setIsGameRunning(false);
+        localStorage.removeItem("player");
+        localStorage.removeItem("tableData");
+    }
+
+    const ComputerCheck = (player) => {
+        let col = 0;
+        let row = 0;
+        do {
+            col = Math.floor(Math.random() * 3);
+            row = Math.floor(Math.random() * 3);
+        }
+        while (table[col][row] !== -1);
+
+        onClick(col, row, player, true)
+    }
+
+    const onClick = (col, row, player, isComputor = false) => {
+        if (table[col][row] !== -1 || winner !== -1) return null;
+        setIsGameRunning(true)
+        table[col][row] = player;
         setTable([...table])
-        setWinner(onCheckWinner(table, round))
+        const newWinner = onCheckWinner(player)
+        if (newWinner !== -1) {
+            resetTable()
+            return setWinner(newWinner);
+        }
+        changePlayer(player);
+        localStorage.setItem('tableData', JSON.stringify(table))
+        localStorage.setItem('mode', mode.toString());
+        
+        if (!isComputor && mode === 1 && newWinner === -1) {
+            const nextPlayer = player === PLAYERS.TWO ? PLAYERS.ONE : PLAYERS.TWO;
+            ComputerCheck(nextPlayer)
+        }
     }
 
     const reset = () => {
         setTable(initTabel);
         setWinner(-1);
-        setRound(ROUND.ONE)
+        setPlayer(PLAYERS.ONE);
+        resetTable()
     }
 
-    return <HomeView {...{ table, round, onClick, reset, winner }} />;
+    return <HomeView {...{ table, player, onClick, reset, winner, mode, setMode, isGameRunning }} />;
 };
 export default Home;
