@@ -102,7 +102,6 @@ const Home = () => {
         while (table[col][row] !== -1);
         onClick(col, row, player, true)
     }
-
     const saveWinner = (winner) => {
         let historyGame = localStorage.getItem("historyGame");
         if (historyGame && Array.isArray(JSON.parse(historyGame))) {
