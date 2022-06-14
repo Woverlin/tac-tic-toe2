@@ -18,7 +18,7 @@ const HomeView = ({ table, round, onClick, winner, reset }) => {
                         </div>
                     }
                 </div>
-                <button onClick={reset}>
+                <button className='button-reset' onClick={reset}>
                     Reset game
                 </button>
             </div>
