@@ -1,7 +1,7 @@
 import React from 'react';
 import './TacTicItem.scss'
-const TacticItem = ({ gribValue, onClick, className = '' }) => {
-    const value = gribValue === -1 ? null : gribValue === 1 ? 'X' : 'O'
+const TacticItem = ({ gridValue, onClick, className = '' }) => {
+    const value = gridValue === -1 ? null : gridValue === 1 ? 'X' : 'O'
     return (
         <div className={`tac-tic-item ${className}`} onClick={onClick}>
             {value}

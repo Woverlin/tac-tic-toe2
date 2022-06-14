@@ -2,8 +2,8 @@ import React from "react";
 import { PLAYERS } from ".";
 import TacticItem from "../../components/TacTicItem";
 import './Home.scss';
-const HomeView = ({ table, player, onClick, winner, reset, mode, setMode, isGameRunning }) => {
-    const getWinnerName = (winner) =>  winner === 2 ? 'No one win' : winner === 1 ? 'X win' : 'O win';
+const HomeView = ({ table, player, onClick, winner, reset, mode, onChangeMode }) => {
+    const getWinnerName = (winner) => winner === 2 ? 'No one win' : winner === 1 ? 'X win' : 'O win';
 
     let historyGame = localStorage.getItem('historyGame');
     if (historyGame && Array.isArray(JSON.parse(historyGame))) {
@@ -20,7 +20,7 @@ const HomeView = ({ table, player, onClick, winner, reset, mode, setMode, isGame
                     {col?.map((row, indexRow) =>
                         <TacticItem
                             key={indexCol + indexRow}
-                            gribValue={table[indexCol][indexRow]}
+                            gridValue={table[indexCol][indexRow]}
                             className={`tactic${indexCol}${indexRow}`}
                             onClick={() => onClick(indexCol, indexRow, player, false)} />)}
                 </div>
@@ -40,13 +40,12 @@ const HomeView = ({ table, player, onClick, winner, reset, mode, setMode, isGame
                 <div className='game-mode__title'>
                     Mode:
                 </div>
-
                 <div >
-                    <span>
-                        <input onChange={() => !isGameRunning && setMode(0)} checked={mode === 0} type="radio" /> PvP
+                    <span >
+                        <input id='pvp-mode' onChange={() => onChangeMode(0)} checked={mode === 0} type="radio" /> PvP
                     </span>
                     <span>
-                        <input onChange={() => !isGameRunning && setMode(1)} type="radio" checked={mode === 1} /> PvC
+                        <input onChange={() =>  onChangeMode(1)} type="radio" checked={mode === 1} /> PvC
                     </span>
                 </div>
             </div>
@@ -55,7 +54,7 @@ const HomeView = ({ table, player, onClick, winner, reset, mode, setMode, isGame
             </button>
             <div className='history-container'>
                 <div>
-                    Hisotry
+                    History
                 </div>
                 {historyGame?.map((item, index) => <div className='history-item' key={index} >
                     <span>
@@ -64,11 +63,11 @@ const HomeView = ({ table, player, onClick, winner, reset, mode, setMode, isGame
                     <span>
                         {getWinnerName(item.winnerId)}
                     </span>
-                   
+
                 </div>)}
             </div>
 
-         
+
         </div>
     );
 };

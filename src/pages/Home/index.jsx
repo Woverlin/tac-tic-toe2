@@ -6,8 +6,8 @@ export const PLAYERS = {
     TWO: 0,
 };
 const Home = () => {
-    const initTabel = [new Array(3).fill(-1), new Array(3).fill(-1), new Array(3).fill(-1)];
-    const [table, setTable] = useState(initTabel);
+    const initTable = [new Array(3).fill(-1), new Array(3).fill(-1), new Array(3).fill(-1)];
+    const [table, setTable] = useState(initTable);
     const [player, setPlayer] = useState(PLAYERS.ONE)
     const [winner, setWinner] = useState(-1);
     const [mode, setMode] = useState(0);
@@ -31,14 +31,14 @@ const Home = () => {
 
     const onCheckWinner = (player) => {
         const diagonals = checkDiagonals(player);
-        const winer = checkVerticalsAndHorizontals(player);
+        const winner = checkVerticalsAndHorizontals(player);
 
         if (diagonals !== -1) {
             return diagonals;
         }
 
-        if (winer !== -1) {
-            return winer;
+        if (winner !== -1) {
+            return winner;
         }
 
         if (checkNoOneWin()) {
@@ -92,7 +92,7 @@ const Home = () => {
         localStorage.removeItem("tableData");
     }
 
-    const ComputerCheck = (player) => {
+    const computerCheck = (player) => {
         let col = 0;
         let row = 0;
         do {
@@ -107,12 +107,12 @@ const Home = () => {
         let historyGame = localStorage.getItem("historyGame");
         if (historyGame && Array.isArray(JSON.parse(historyGame))) {
             historyGame = JSON.parse(historyGame)
-        }
+        } else historyGame = []
         historyGame.push({ winnerId: winner });
         localStorage.setItem('historyGame', JSON.stringify(historyGame))
     }
 
-    const onClick = (col, row, player, isComputor = false) => {
+    const onClick = (col, row, player, isComputer = false) => {
         if (table[col][row] !== -1 || winner !== -1) return null;
         setIsGameRunning(true)
         table[col][row] = player;
@@ -125,21 +125,27 @@ const Home = () => {
         }
         changePlayer(player);
         localStorage.setItem('tableData', JSON.stringify(table))
-        localStorage.setItem('mode', mode.toString());
         
-        if (!isComputor && mode === 1 && newWinner === -1) {
+        
+        if (!isComputer && mode === 1 && newWinner === -1) {
             const nextPlayer = player === PLAYERS.TWO ? PLAYERS.ONE : PLAYERS.TWO;
-            ComputerCheck(nextPlayer)
+            computerCheck(nextPlayer)
         }
     }
 
     const reset = () => {
-        setTable(initTabel);
+        setTable(initTable);
         setWinner(-1);
         setPlayer(PLAYERS.ONE);
         resetTable()
     }
 
-    return <HomeView {...{ table, player, onClick, reset, winner, mode, setMode, isGameRunning }} />;
+    const onChangeMode = (mode) => {
+        if (isGameRunning) return null;
+        setMode(mode);
+        localStorage.setItem('mode', mode.toString());
+    }
+
+    return <HomeView {...{ table, player, onClick, reset, winner, mode, setMode, isGameRunning, onChangeMode }} />;
 };
 export default Home;
