@@ -18,7 +18,7 @@ describe("App.js", () => {
         await page.click(".tactic12");
         await page.click(".tactic22");
         const text = await page.$eval(".result", (e) => e.textContent);
-        expect(text).toContain("X win");
+        expect(text).toContain("O win");
     });
 
     it("e2e : 0 win", async () => {
