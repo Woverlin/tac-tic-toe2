@@ -11,7 +11,7 @@ const HomeView = ({ table, round, onClick, winner, reset }) => {
             <div className='table'>
                 {table?.map((col, indexCol) => <div key={indexCol} className='table-row'>
                     {col?.map((row, indexRow) =>
-                        <TacticItem key={indexCol + indexRow} className={`tactic_${indexCol}${indexRow}`} onClick={() => onClick(indexCol, indexRow)} row={indexRow} col={indexCol} {...{ round, table }} />)}
+                        <TacticItem key={indexCol + indexRow} className={`tactic${indexCol}${indexRow}`} onClick={() => onClick(indexCol, indexRow)} row={indexRow} col={indexCol} {...{ round, table }} />)}
                 </div>
                 )}
                 <div className='result-container'>
