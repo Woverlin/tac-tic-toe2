@@ -11,13 +11,15 @@ const HomeView = ({ table, round, onClick, winner, reset }) => {
                         <TacticItem key={indexCol + indexRow} onClick={() => onClick(indexCol, indexRow)} row={indexRow} col={indexCol} {...{ round, table }} />)}
                 </div>
                 )}
-                {winner !== -1 &&
-                    <div className='result'>
-                        {winnerName}
-                    </div>
-                }
+                <div className='result-container'>
+                    {winner !== -1 &&
+                        <div className='result'>
+                            {winnerName}
+                        </div>
+                    }
+                </div>
                 <button onClick={reset}>
-                    Reset game 
+                    Reset game
                 </button>
             </div>
         </div>

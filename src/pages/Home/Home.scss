@@ -5,8 +5,11 @@
             flex-direction: row;
         }
     }
-
-    .result {
-        padding: 20px
+    .result-container{
+        height: 50px;
+        .result {
+            padding: 20px
+        }
     }
+   
 }
