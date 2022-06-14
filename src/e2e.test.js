@@ -35,7 +35,7 @@ describe("App.js", () => {
     });
 
     it("e2e : No one win", async () => {
-      await page.goto("http://localhost:3001/tac-tic-toe2");
+      await page.goto("https://woverlin.github.io/tac-tic-toe2/");
       await page.waitForSelector(".title");
       await page.click(".tactic00");
       await page.click(".tactic01");
