@@ -7,7 +7,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: git push origin --delete gh-pages
       - run: npm run deploy
       - run: npm run test
       - run: npm run test:e2e
