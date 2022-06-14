@@ -1,0 +1,12 @@
+.home {
+    .table {
+        &-row {
+            display: flex;
+            flex-direction: row;
+        }
+    }
+
+    .result {
+        padding: 20px
+    }
+}
