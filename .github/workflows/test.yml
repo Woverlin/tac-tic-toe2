@@ -1,0 +1,14 @@
+name: run test
+
+on:
+  push:
+    branches: [ gh-pages ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm test
+      - run: npm test:e2e
+      
+      
